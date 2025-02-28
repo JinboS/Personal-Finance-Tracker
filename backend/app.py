@@ -6,16 +6,16 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
-# 配置 SQLite 数据库
+# Configure SQLite database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///finance.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# 定义财务记录模型
+# Define financial record model
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
-    category = db.Column(db.String(10), nullable=False)  # income 或 expense
+    category = db.Column(db.String(10), nullable=False)  # income or expense
     description = db.Column(db.String(200))
     amount = db.Column(db.Float, nullable=False)
 
@@ -28,13 +28,13 @@ class Record(db.Model):
             "amount": self.amount
         }
 
-# 获取所有记录
+# Retrieve all records
 @app.route('/api/records', methods=['GET'])
 def get_records():
     records = Record.query.all()
     return jsonify([r.to_dict() for r in records])
 
-# 添加记录
+# Add record
 @app.route('/api/records', methods=['POST'])
 def add_record():
     data = request.get_json()
@@ -53,7 +53,7 @@ def add_record():
     db.session.commit()
     return jsonify(record.to_dict()), 201
 
-# 更新记录
+# Update record
 @app.route('/api/records/<int:id>', methods=['PUT'])
 def update_record(id):
     data = request.get_json()
@@ -69,7 +69,8 @@ def update_record(id):
     db.session.commit()
     return jsonify(record.to_dict())
 
-# 删除记录
+# Delete record
+
 @app.route('/api/records/<int:id>', methods=['DELETE'])
 def delete_record(id):
     record = Record.query.get_or_404(id)
@@ -77,7 +78,7 @@ def delete_record(id):
     db.session.commit()
     return jsonify({"message": "Record deleted"})
 
-# 示例：获取指定年月的报表（扩展功能）
+# Generate monthly report for specified year and month (extended functionality)
 @app.route('/api/reports/monthly', methods=['GET'])
 def monthly_report():
     year = request.args.get('year', type=int)
@@ -104,5 +105,5 @@ def monthly_report():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # 如果数据库不存在则创建
+        db.create_all()  # Create database if it does not exist
     app.run(debug=True)

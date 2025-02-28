@@ -1,10 +1,10 @@
 import sqlite3
 
-# 连接到 finance.db（如果文件不存在，会自动创建）
+# # Connect to finance.db (if the file does not exist, it will be automatically created)
 conn = sqlite3.connect("finance.db")
 cursor = conn.cursor()
 
-# 创建记录表（与之前 Flask 代码中使用的表结构一致）
+# Create the record table (consistent with the table structure used in the previous Flask code)
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS record (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS record (
 )
 """)
 
-# 插入一些示例数据
+# Insert some sample data
 sample_data = [
     ("2023-01-01", "income", "Salary", 5000),
     ("2023-01-05", "expense", "Groceries", 150),
@@ -32,4 +32,4 @@ VALUES (?, ?, ?, ?)
 conn.commit()
 conn.close()
 
-print("finance.db 已生成并插入测试数据。")
+print("finance.db Test data has been generated and inserted.")

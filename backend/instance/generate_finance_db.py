@@ -27,7 +27,7 @@ sample_data = [
 cursor.executemany("""
 INSERT INTO record (date, category, description, amount)
 VALUES (?, ?, ?, ?)
-""", sample_data)
+""", sample_data) 
 
 conn.commit()
 conn.close()
